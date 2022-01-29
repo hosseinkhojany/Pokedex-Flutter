@@ -1,0 +1,151 @@
+name: untitled1
+description: A new Flutter project.
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.0-134.1.beta <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  animations: ^2.0.2
+#  flutter_html: ^2.2.1
+  cached_network_image: ^3.2.0
+#  device_info: ^2.0.3
+#  device_preview: ^1.0.0
+#  equatable: ^2.0.3
+  lazy_load_scrollview: ^1.1.0
+  dio: ^4.0.4
+  http_interceptor: ^1.0.2
+  flutter_bloc: ^7.0.0
+#  toast: ^0.1.5
+  get: ^4.6.1
+#  http: ^0.13.4
+  flutter_staggered_grid_view: ^0.6.0
+#  page_transition: ^2.0.4
+#  url_launcher: ^6.0.18
+#  flextras: ^0.0.2
+#  provider: ^6.0.1
+#  cupertino_icons: ^1.0.2
+#  anchored_popups: ^0.1.0
+#  animate_do: ^2.0.0
+  #todo: land this patch
+#  auto_size_text:
+#    git:
+#      url: git://github.com/gskinnerTeam/auto_size_text.git
+#      ref: 8800276218b053265ffc796a24e84820bebaaeac
+#  bitsdojo_window: ^0.1.0+1
+#  cloudinary_public: ^0.8.0
+#  context_menus: ^0.1.0+5
+#  darq: ^1.0.0-dev.3
+#  desktop_window: ^0.4.0
+  dotted_border: ^2.0.0-nullsafety.0
+#  email_validator: ^2.0.1
+#  enum_to_string: ^2.0.0-nullsafety.1
+#  flutter_lorem: ^2.0.0
+#  file_selector: ^0.8.2
+#  file_selector_windows: ^0.0.2
+#  file_selector_macos: ^0.0.4
+#  file_selector_linux: ^0.0.2
+#  file_selector_web: ^0.8.1
+#  flutter_svg: ^0.22.0
+#  image_picker: ^0.8.0+4
+#  image_size_getter: ^1.0.0
+#  multi_image_picker: ^4.8.00
+#  path_provider: ^2.0.1
+#  random_color: ^1.0.6-nullsafety
+#  sized_context: ^1.0.0+1
+  shared_preferences: ^2.0.12
+#  share: ^2.0.1
+#  system_info: ^1.0.0
+#  statsfl: ^2.0.1+1
+#  timeago: ^3.0.2
+#  universal_platform: ^1.0.0-nullsafety
+#  uuid: ^3.0.1
+#  visibility_detector: ^0.2.0-nullsafety.1
+
+  # FIREBASE
+#  firedart: ^0.9.0+1
+#  firebase_core: ^1.11.0
+#  firebase_auth: ^3.3.5
+#  cloud_firestore: ^3.1.6
+
+dev_dependencies:
+  # sample build cmd
+  # flutter pub run build_runner build --delete-conflicting-outputs
+  flutter_driver:
+    sdk: flutter
+#  test: any
+  flutter_test:
+    sdk: flutter
+#  build_runner:
+#  flutter_lints: ^1.0.0
+#  freezed: ^0.14.1
+#  freezed_annotation: ^1.1.0
+#  json_serializable:
+#  flutter_launcher_icons: ^0.9.0
+#  msix: ^2.1.1
+
+
+msix_config:
+  display_name: Flutter Folio
+  publisher_display_name: gskinner, inc
+  identity_name: 56347gskinner-xboxapps.FlutterFolio
+  msix_version: 1.1.0.0
+  start_menu_icon_path: ./source-assets/app-flutter-folio.png
+  tile_icon_path: ./source-assets/app-flutter-folio.png
+  publisher: CN=8BC7C029-E8A6-4A58-BB90-CCCBD93A99FD
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: source-assets/app-flutter-folio.png
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/images/image1.jpg
+    - assets/images/icons/
+    - assets/images/emoji/
+    - assets/images/logos/
+    - assets/images/landing_page/
+  fonts:
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces_72pt-SemiBold.ttf
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-Regular.ttf
+        - asset: assets/fonts/Raleway-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Raleway-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Raleway-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Raleway-ExtraBold.ttf
+          weight: 800
+    - family: AlfaSlabOne
+      fonts:
+        - asset: assets/fonts/scraps/AlfaSlabOne-Regular.ttf
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/scraps/Amiri-Regular.ttf
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/scraps/Caveat-Medium.ttf
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/scraps/Lato-Regular.ttf
+    - family: Mali
+      fonts:
+        - asset: assets/fonts/scraps/Mali-Medium.ttf
+    - family: PathwayGothicOne
+      fonts:
+        - asset: assets/fonts/scraps/PathwayGothicOne-Regular.ttf
