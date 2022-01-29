@@ -17,21 +17,27 @@ class PokemonListScreen extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     int crossAxisCount = (screenSize.width / 200).round();
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Flutter GridView Demo"),
-        ),
-        body: Obx(
-          () => LazyLoadScrollView(
-            onEndOfPage: _controller.loadNextPage,
-            isLoading: _controller.lastPage,
-            child: ListView.builder(
-              itemCount: _controller.pokemons.length,
-              itemBuilder: (context, index) {
+      appBar: AppBar(
+        title: Text("Flutter GridView Demo"),
+      ),
+      body: Obx(
+        () => LazyLoadScrollView(
+          onEndOfPage: _controller.loadNextPage,
+          isLoading: _controller.lastPage,
+          child: GridView.count(
+            padding: const EdgeInsets.all(10),
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+            children: List.generate(
+              _controller.pokemons.length,
+              (index) {
                 final pokemon = _controller.pokemons[index];
-                return SizedBox(
-                  width: screenSize.width,
-                  height: 200,
-                  child: OpenContainer<bool>(
+                return Card(
+                  child: SizedBox(
+                    width: screenSize.width,
+                    height: 150,
+                    child: OpenContainer<bool>(
                       tappable: false,
                       transitionType: ContainerTransitionType.fade,
                       closedShape: const RoundedRectangleBorder(),
@@ -39,38 +45,45 @@ class PokemonListScreen extends StatelessWidget {
                       openBuilder: (context, openContainer) =>
                           const PokemonDetail(),
                       closedBuilder: (context, openContainer) {
-                        return Card(
-                          color: Colors.orange,
-                          child: Center(
-                              child: InkWell(
-                            onTap: () => {
-                              openContainer.call()
-                            },
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 90,
+                        return InkWell(
+                          onTap: ()=> openContainer.call(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                color: Colors.black38,
+                                height: 150,
+                                child: Center(
+                                  child: Image.network(
+                                    pokemon.getImage(),
                                     width: 90,
-                                    child: Image.network(
-                                      pokemon.getImage(),
-                                    ),
                                   ),
-                                  Padding(
-                                      padding: EdgeInsets.all(10.0),
-                                      child: Text(pokemon.name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!)),
-                                ]),
-                          )),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(pokemon.name),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         );
-                      }),
+                      },
+                    ),
+                  ),
                 );
               },
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
