@@ -8,6 +8,12 @@ const BASE_API_URL = "https://pokeapi.co/api/v2";
 mixin AppLimit {
   static const int DIO_TIME_OUT = 30000;
 }
+enum RequestState{
+  LOADING,
+  IDLE,
+  ERROR,
+  SUCCESS
+}
 
 const String appVersion = '0.0.1';
 const String environment = 'Production';
