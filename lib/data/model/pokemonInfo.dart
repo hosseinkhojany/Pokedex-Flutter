@@ -1,71 +1,52 @@
-class PokemonInfo{
+import 'dart:math';
 
+List<String> typesFromJson(List<dynamic> str) {
+  List<String> result = [];
+  str.forEach((element) {
+    result.add((((element as Map<String, dynamic>)['type']) as Map<String, dynamic>)['name'] ?? "");
+  });
+  return result;
+}
 
-  PokemonInfo({
-    required this.id,
-    required this.name,
-    required this.height,
-    required this.weight,
-    required this.base_experience,
-    required this.types});
+class PokemonInfo {
+  PokemonInfo(
+      {required this.id,
+      required this.name,
+      required this.height,
+      required this.weight,
+      required this.base_experience,
+      required this.types});
 
-  String id;
+  int id;
   String name;
-  String height;
-  String weight;
-  String base_experience;
-  String types;
+  int height;
+  int weight;
+  int base_experience;
+  List<String> types;
+  int hp = Random.secure().nextInt(300);
+  int attack = Random.secure().nextInt(300);
+  int defense = Random.secure().nextInt(300);
+  int speed = Random.secure().nextInt(300);
+  int exp = Random.secure().nextInt(1000);
 
   factory PokemonInfo.fromJson(Map<String, dynamic> json) => PokemonInfo(
-    id: json["id"],
-    name: json["name"],
-    height: json["height"],
-    weight: json["weight"],
-    base_experience: json["base_experience"],
-    types: json["types"],
-  );
+        id: json["id"],
+        name: json["name"],
+        height: json["height"],
+        weight: json["weight"],
+        base_experience: json["base_experience"],
+        types: typesFromJson(json["types"]),
+      );
 
-  // data class PokemonInfo(
-  // @field:Json(name = "id") @PrimaryKey val id: Int,
-  // @field:Json(name = "name") val name: String,
-  // @field:Json(name = "height") val height: Int,
-  // @field:Json(name = "weight") val weight: Int,
-  // @field:Json(name = "base_experience") val experience: Int,
-  // @field:Json(name = "types") val types: List<TypeResponse>,
-  // val hp: Int = Random.nextInt(maxHp),
-  // val attack: Int = Random.nextInt(maxAttack),
-  // val defense: Int = Random.nextInt(maxDefense),
-  // val speed: Int = Random.nextInt(maxSpeed),
-  // val exp: Int = Random.nextInt(maxExp)
-  // ) {
-  //
-  // fun getIdString(): String = String.format("#%03d", id)
-  // fun getWeightString(): String = String.format("%.1f KG", weight.toFloat() / 10)
-  // fun getHeightString(): String = String.format("%.1f M", height.toFloat() / 10)
-  // fun getHpString(): String = "$hp/$maxHp"
-  // fun getAttackString(): String = "$attack/$maxAttack"
-  // fun getDefenseString(): String = "$defense/$maxDefense"
-  // fun getSpeedString(): String = "$speed/$maxSpeed"
-  // fun getExpString(): String = "$exp/$maxExp"
-  //
-  // @JsonClass(generateAdapter = true)
-  // data class TypeResponse(
-  // @field:Json(name = "slot") val slot: Int,
-  // @field:Json(name = "type") val type: Type
-  // )
-  //
-  // @JsonClass(generateAdapter = true)
-  // data class Type(
-  // @field:Json(name = "name") val name: String
-  // )
-  //
-  // companion object {
-  // const val maxHp = 300
-  // const val maxAttack = 300
-  // const val maxDefense = 300
-  // const val maxSpeed = 300
-  // const val maxExp = 1000
-  // }
-  // }
+// @JsonClass(generateAdapter = true)
+// data class TypeResponse(
+// @field:Json(name = "slot") val slot: Int,
+// @field:Json(name = "type") val type: Type
+// )
+//
+// @JsonClass(generateAdapter = true)
+// data class Type(
+// @field:Json(name = "name") val name: String
+// )
 
 }

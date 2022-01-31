@@ -72,17 +72,6 @@ class AppRouter {
                 context, animation, secondaryAnimation, child);
           },
         );
-      case POKEMON_DETAIL_ROUTE:
-        // return PageTransition(child: PokemonDetail(), type: PUSH_ANIMATION);
-        return PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return PokemonDetail();
-          },
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return globalTransaction(
-                context, animation, secondaryAnimation, child);
-          },
-        );
       default:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {

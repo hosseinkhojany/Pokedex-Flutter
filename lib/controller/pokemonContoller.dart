@@ -1,28 +1,36 @@
 import 'package:get/get.dart';
 import 'package:untitled1/data/model/pokemon.dart';
+import 'package:untitled1/data/model/pokemonInfo.dart';
 import 'package:untitled1/data/model/pokemonResponse.dart';
 import 'package:untitled1/data/repository/pokemonRepo.dart';
 
 import '../data/config/paginationFilter.dart';
+import '../utils/consts.dart';
 
 class PokemonController extends GetxController {
 
   final PokemonRepository _pokemonRepository;
   final _pokemons = <Pokemon>[].obs;
+  Rx<PokemonInfo> _currentPokemonInfo = PokemonInfo(id: 0, name: "", height: 0, weight: 0, base_experience: 0, types: []).obs;
   final _paginationFilter = PaginationFilter().obs;
+  final _pokemonName = "".obs;
   final _lastPage = false.obs;
+  int get _page => _paginationFilter.value.page;
 
   PokemonController(this._pokemonRepository);
 
-  var isLoading = true.obs;
+  PokemonInfo get currentPokemonInfo => _currentPokemonInfo.value;
+  var requestStateListPokmemon = RequestState.IDLE.obs;
+  var requestStateAPokemon = RequestState.IDLE.obs;
   List<Pokemon> get pokemons => _pokemons.toList();
-  int get limit => _paginationFilter.value.limit;
-  int get _page => _paginationFilter.value.page;
   bool get lastPage => _lastPage.value;
+  int get limit => _paginationFilter.value.limit;
+
 
   @override
   void onInit() {
     ever(_paginationFilter, (_) => _getNewPokemon());
+    ever(_pokemonName, (_) => _getAPokemon());
     _changePaginationFilter(1, 25);
     super.onInit();
   }
@@ -30,39 +38,56 @@ class PokemonController extends GetxController {
   Future<void> _getNewPokemon() async {
     await _pokemonRepository.getNewListPokemon(
       _paginationFilter.value,
-          start: () => { isLoading.value = true },
-          complete: () => { isLoading.value = false },
-          error: () => {  },
-          success: (pokemonResponse) => {
-          if ((pokemonResponse as PokemonResponse).results.isNotEmpty) {
-            _pokemons.addAll(pokemonResponse.results)
-          }else{
-            _lastPage.value = true
-          }
-      },);
+      start: () => {updateStateListPokemon(RequestState.LOADING)},
+      error: (error) {updateStateListPokemon(RequestState.ERROR);},
+      success: (pokemonResponse) {
+        if ((pokemonResponse as PokemonResponse).results.isNotEmpty)
+          {_pokemons.addAll(pokemonResponse.results);}
+        else
+          {_lastPage.value = true;}
+        updateStateListPokemon(RequestState.SUCCESS);
+      },
+    );
   }
 
-  // Future<void> _getNewPokemon() async {
-  //   PokemonResponse? response = await _pokemonRepository.getNewListPokemon(_paginationFilter.value);
-  //   if(response != null){
-  //     if(response.results.isNotEmpty){
-  //       _pokemons.addAll(response.results);
-  //     }else{
-  //       _lastPage.value = true;
-  //     }
-  //   }
-  // }
-  void changeTotalPerPage(int limitValue) {
-    _pokemons.clear();
-    _lastPage.value = false;
-    _changePaginationFilter(1, limitValue);
+  Future<void> _getAPokemon() async {
+    await _pokemonRepository.getAPokemonInfo(
+      _pokemonName.value,
+      start: () => {updateStateAPokemon(RequestState.LOADING)},
+      error: (error) {updateStateAPokemon(RequestState.ERROR);},
+      success: (pokemonInfoResponse) {
+        if ((pokemonInfoResponse is PokemonInfo))
+          {
+            _currentPokemonInfo.value = pokemonInfoResponse;
+            updateStateAPokemon(RequestState.SUCCESS);
+          }
+      },
+    );
   }
+
   void _changePaginationFilter(int page, int limit) {
     _paginationFilter.update((val) {
       val?.page = page;
       val?.limit = limit;
     });
   }
-  void loadNextPage() => _changePaginationFilter(_page + 1, limit);
 
+  void updateStateListPokemon(RequestState state){
+    requestStateListPokmemon.value = state;
+    update();
+  }
+
+  void updateStateAPokemon(RequestState state){
+    requestStateAPokemon.value = state;
+    update();
+  }
+
+  void loadNextPage() => _changePaginationFilter(_page + 1, limit);
+  void loadPokemonInfo(String pokemonName, [bool force = false]) {
+    if(force){
+      _getAPokemon();
+    }else{
+      _pokemonName.value = pokemonName;
+    }
+  }
 }

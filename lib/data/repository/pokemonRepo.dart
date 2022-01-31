@@ -1,44 +1,43 @@
-import 'package:flutter/material.dart';
 import 'package:untitled1/data/config/paginationFilter.dart';
 import 'package:untitled1/data/datasource/pokemonDs.dart';
-import 'package:untitled1/data/model/pokemonResponse.dart';
+import 'package:untitled1/data/model/errorResponse.dart';
 
-class PokemonRepository{
+class PokemonRepository {
+  final PokemonDs pokemonDs;
 
-    final PokemonDs pokemonDs;
+  PokemonRepository(this.pokemonDs);
 
-    PokemonRepository(this.pokemonDs);
-
-    Future<void> getNewListPokemon(
-        PaginationFilter filter,
-        {Function? start = null,
-            Function? complete = null,
-            Function? error = null,
-            Function? success = null}
-        ) async{
-        start?.call();
-        try {
-            var listPokemon = await pokemonDs.fetchNewListPokemon(filter);
-            if (listPokemon != null) {
-                success?.call(listPokemon);
-            }
-        } catch(e) {
-            error?.call();
-        } finally {
-            complete?.call();
-        }
+  Future<void> getNewListPokemon(PaginationFilter filter,
+      {required Function start,
+        required Function error,
+        required Function success}) async {
+    start.call();
+    try {
+      var response = await pokemonDs.fetchNewListPokemon(filter);
+      if (response != null) {
+        success.call(response);
+      } else {
+        error.call((response as ErrorResponse).message);
+      }
+    } catch (e) {
+      error.call("try again");
     }
+  }
 
-    // Future<PokemonResponse?> getNewListPokemon(PaginationFilter filter) async{
-    //     try {
-    //         var listPokemon = await pokemonDs.fetchNewListPokemon(filter);
-    //         if (listPokemon != null) {
-    //             return listPokemon;
-    //         }
-    //     } catch(e) {
-    //     }
-    //     return null;
-    // }
-
-
+  Future<void> getAPokemonInfo(String name,
+      {required Function start,
+      required Function error,
+      required Function success}) async {
+    start.call();
+    try {
+      var response = await pokemonDs.fetchAPokemonInfo(name);
+      if ((response is ErrorResponse) == false) {
+        success.call(response);
+      } else {
+        error.call((response as ErrorResponse).message);
+      }
+    } catch (e) {
+      error.call("try again");
+    }
+  }
 }
