@@ -1,28 +1,50 @@
-import 'dart:convert';
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
-import 'package:hive_flutter/adapters.dart';
+part of 'pokemon.dart';
 
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
-List<Pokemon> pokemonFromJson(String str) =>
-    List<Pokemon>.from(json.decode(str).map((x) => Pokemon.fromJson(x)));
+class PokemonAdapter extends TypeAdapter<Pokemon> {
+  @override
+  final int typeId = 1;
 
-@HiveType(typeId: 1)
-class Pokemon extends HiveObject{
-
-  Pokemon(this.name, this.url);
-  
-  @HiveField(0)
-  String name;
-  @HiveField(1)
-  String url;
-
-  String getImage(){
-    return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${url.split("/")[url.split("/").length - 2]}.png";
+  @override
+  Pokemon read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Pokemon(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as int,
+      fields[3] as int,
+    );
   }
 
-  factory Pokemon.fromJson(Map<String, dynamic> json) => Pokemon(
-      json["name"],
-      json["url"]
-  );
+  @override
+  void write(BinaryWriter writer, Pokemon obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.url)
+      ..writeByte(2)
+      ..write(obj.color)
+      ..writeByte(3)
+      ..write(obj.page);
+  }
 
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PokemonAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

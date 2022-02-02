@@ -8,13 +8,13 @@ import '../data/config/paginationFilter.dart';
 import '../utils/consts.dart';
 
 class PokemonController extends GetxController {
-
   final PokemonRepository _pokemonRepository;
   final _pokemons = <Pokemon>[].obs;
-  Rx<PokemonInfo> _currentPokemonInfo = PokemonInfo(id: 0, name: "", height: 0, weight: 0, base_experience: 0, types: []).obs;
+  Rx<PokemonInfo> _currentPokemonInfo = PokemonInfo(0, "", 0, 0, 0, []).obs;
   final _paginationFilter = PaginationFilter().obs;
   final _pokemonName = "".obs;
   final _lastPage = false.obs;
+
   int get _page => _paginationFilter.value.page;
 
   PokemonController(this._pokemonRepository);
@@ -22,10 +22,12 @@ class PokemonController extends GetxController {
   PokemonInfo get currentPokemonInfo => _currentPokemonInfo.value;
   var requestStateListPokmemon = RequestState.IDLE.obs;
   var requestStateAPokemon = RequestState.IDLE.obs;
-  List<Pokemon> get pokemons => _pokemons.toList();
-  bool get lastPage => _lastPage.value;
-  int get limit => _paginationFilter.value.limit;
 
+  List<Pokemon> get pokemons => _pokemons.toList();
+
+  bool get lastPage => _lastPage.value;
+
+  int get limit => _paginationFilter.value.limit;
 
   @override
   void onInit() {
@@ -39,13 +41,16 @@ class PokemonController extends GetxController {
     await _pokemonRepository.getNewListPokemon(
       _paginationFilter.value,
       start: () => {updateStateListPokemon(RequestState.LOADING)},
-      error: (error) {updateStateListPokemon(RequestState.ERROR);},
-      success: (pokemonResponse) {
-        if ((pokemonResponse as PokemonResponse).results.isNotEmpty)
-          {_pokemons.addAll(pokemonResponse.results);}
-        else
-          {_lastPage.value = true;}
-        updateStateListPokemon(RequestState.SUCCESS);
+      error: (error) {
+        updateStateListPokemon(RequestState.ERROR);
+      },
+      success: (listPokemons) {
+        if ((listPokemons as List<Pokemon>).isNotEmpty) {
+          _pokemons.addAll(listPokemons);
+          updateStateListPokemon(RequestState.SUCCESS);
+        } else {
+          _lastPage.value = true;
+        }
       },
     );
   }
@@ -54,13 +59,14 @@ class PokemonController extends GetxController {
     await _pokemonRepository.getAPokemonInfo(
       _pokemonName.value,
       start: () => {updateStateAPokemon(RequestState.LOADING)},
-      error: (error) {updateStateAPokemon(RequestState.ERROR);},
+      error: (error) {
+        updateStateAPokemon(RequestState.ERROR);
+      },
       success: (pokemonInfoResponse) {
-        if ((pokemonInfoResponse is PokemonInfo))
-          {
-            _currentPokemonInfo.value = pokemonInfoResponse;
-            updateStateAPokemon(RequestState.SUCCESS);
-          }
+        if ((pokemonInfoResponse is PokemonInfo)) {
+          _currentPokemonInfo.value = pokemonInfoResponse;
+          updateStateAPokemon(RequestState.SUCCESS);
+        }
       },
     );
   }
@@ -72,21 +78,32 @@ class PokemonController extends GetxController {
     });
   }
 
-  void updateStateListPokemon(RequestState state){
+  void updatePokemonColor(int page, String pokemonName, int color) async {
+    await _pokemonRepository.updatePokemonColor(page, pokemonName, color, start:()=>{}, error:(error)=>{}, success:(response)=>{});
+  }
+
+  void updateStateListPokemon(RequestState state) {
     requestStateListPokmemon.value = state;
     update();
   }
 
-  void updateStateAPokemon(RequestState state){
+  void updateStateAPokemon(RequestState state) {
     requestStateAPokemon.value = state;
     update();
   }
 
-  void loadNextPage() => _changePaginationFilter(_page + 1, limit);
+  void loadNextPage([bool force = false]) {
+    if (force) {
+      _getNewPokemon();
+    } else {
+      _changePaginationFilter(_page + 1, limit);
+    }
+  }
+
   void loadPokemonInfo(String pokemonName, [bool force = false]) {
-    if(force){
+    if (force) {
       _getAPokemon();
-    }else{
+    } else {
       _pokemonName.value = pokemonName;
     }
   }

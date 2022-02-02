@@ -1,4 +1,7 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+part 'pokemonInfo.g.dart';
 
 List<String> typesFromJson(List<dynamic> str) {
   List<String> result = [];
@@ -7,46 +10,52 @@ List<String> typesFromJson(List<dynamic> str) {
   });
   return result;
 }
-
-class PokemonInfo {
+@HiveType(typeId: 2)
+class PokemonInfo extends HiveObject {
   PokemonInfo(
-      {required this.id,
-      required this.name,
-      required this.height,
-      required this.weight,
-      required this.base_experience,
-      required this.types});
+  this.id,
+  this.name,
+  this.height,
+  this.weight,
+  this.base_experience,
+  this.types, {
+        this.hp = 0,
+        this.attack = 0,
+        this.defense = 0,
+        this.speed = 0,
+        this.exp = 0,
+      });
 
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String name;
+  @HiveField(2)
   int height;
+  @HiveField(3)
   int weight;
+  @HiveField(4)
   int base_experience;
+  @HiveField(5)
   List<String> types;
+  @HiveField(6)
   int hp = Random.secure().nextInt(300);
+  @HiveField(7)
   int attack = Random.secure().nextInt(300);
+  @HiveField(8)
   int defense = Random.secure().nextInt(300);
+  @HiveField(9)
   int speed = Random.secure().nextInt(300);
+  @HiveField(10)
   int exp = Random.secure().nextInt(1000);
 
   factory PokemonInfo.fromJson(Map<String, dynamic> json) => PokemonInfo(
-        id: json["id"],
-        name: json["name"],
-        height: json["height"],
-        weight: json["weight"],
-        base_experience: json["base_experience"],
-        types: typesFromJson(json["types"]),
+        json["id"],
+        json["name"],
+        json["height"],
+        json["weight"],
+        json["base_experience"],
+        typesFromJson(json["types"]),
       );
-
-// @JsonClass(generateAdapter = true)
-// data class TypeResponse(
-// @field:Json(name = "slot") val slot: Int,
-// @field:Json(name = "type") val type: Type
-// )
-//
-// @JsonClass(generateAdapter = true)
-// data class Type(
-// @field:Json(name = "name") val name: String
-// )
 
 }

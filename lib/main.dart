@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:untitled1/appRouter.dart';
-import 'package:untitled1/utils/sharedStore.dart';
+import 'package:untitled1/data/config/hive/hiveConfig.dart';
+import 'package:untitled1/data/datasource/local/sharedStore.dart';
 
 import 'bindings/appBinding.dart';
 
+void main() async {
 
-void main() {
-
-  SharedStore.init();
+  await HiveConfig.init();
 
   runApp(MyApp(
     router: AppRouter(),
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'ic_font',
         primarySwatch: Colors.blue,
       ),
       // home: _buildStack()

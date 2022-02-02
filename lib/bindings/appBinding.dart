@@ -5,7 +5,7 @@ import 'package:untitled1/controller/pokemonContoller.dart';
 import 'package:untitled1/utils/consts.dart';
 
 import '../data/config/logging_interceptor.dart';
-import '../data/datasource/pokemonDs.dart';
+import '../data/datasource/remote/pokemonDs.dart';
 import '../data/repository/loginRepo.dart';
 import '../data/repository/pokemonRepo.dart';
 

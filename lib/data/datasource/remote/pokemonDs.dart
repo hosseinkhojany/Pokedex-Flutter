@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:untitled1/data/model/errorResponse.dart';
 import 'package:untitled1/data/model/pokemonInfo.dart';
 import 'package:untitled1/data/model/pokemonResponse.dart';
-import '../config/paginationFilter.dart';
+import '../../config/paginationFilter.dart';
 
 class PokemonDs{
 
@@ -17,7 +17,7 @@ class PokemonDs{
         'offset': filter.page
       });
       if (response.statusCode == 200) {
-        return PokemonResponse.fromJson(response.data);
+        return PokemonResponse.fromJson(response.data, filter.page);
       } else {
         return ErrorResponse(statusCode: response.statusCode ?? 0, message: response.statusMessage ?? "");
       }

@@ -1,35 +1,30 @@
 import 'package:untitled1/data/model/pokemon.dart';
-import 'dart:convert';
 
 
-List<Pokemon> pokemonListFromList(List<dynamic> list) {
-  var listPokemon = <Pokemon>[];
+List<Pokemon> pokemonListFromList(List<dynamic> list, int page) {
+  List<Pokemon> listPokemon = <Pokemon>[];
   list.forEach((element) {
-    listPokemon.add(Pokemon.fromJson(element));
+    listPokemon.add(Pokemon.fromJson(element, page));
   });
   return listPokemon;
 }
 
-List<PokemonResponse> pokemonResponseFromJson(String str){
-  return List<PokemonResponse>.from(json.decode(str).map((x) => {
-    PokemonResponse.fromJson(x)
-  }));
-
-}
 class PokemonResponse{
 
-  PokemonResponse({required this.count, required this.next, required this.previous, required this.results});
+  PokemonResponse(this.count,this.next, this.previous, this.results, this.page);
 
   int count;
   String next;
   String previous;
+  int page;
   List<Pokemon> results;
 
-  factory PokemonResponse.fromJson(Map<String, dynamic> json) => PokemonResponse(
-      count: json["count"] as int,
-      next: json["next"] as String,
-      previous: json["previous"] as String,
-      results: pokemonListFromList(json["results"]),
+  factory PokemonResponse.fromJson(Map<String, dynamic> json, int page) => PokemonResponse(
+      json["count"] as int,
+      json["next"] as String,
+      json["previous"] as String,
+      pokemonListFromList(json["results"], page),
+      page,
     );
 
 }

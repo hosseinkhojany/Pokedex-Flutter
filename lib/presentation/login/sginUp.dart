@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled1/appRouter.dart';
 import 'package:untitled1/controller/loginController.dart';
+import 'package:untitled1/data/datasource/local/sharedStore.dart';
 import 'package:untitled1/presentation/custom_widget/rounded_input_field.dart';
 
 class SignUpScreen extends StatelessWidget {
+
+  final emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery
@@ -40,7 +44,9 @@ class SignUpScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            RoundedInputField(hintText: "Enter valid email...",
+                            RoundedInputField(
+                              controller: emailController,
+                              hintText: "Enter valid email...",
                               icon: !controller.isEmailValid.value ? Icons.error : Icons.email,
                               onChanged: (text)=>{
                                 controller.updateEmailValidateState(text)
@@ -50,16 +56,17 @@ class SignUpScreen extends StatelessWidget {
                               icon: Icons.password_rounded, onChanged: (text) {  },),
                             SizedBox(height: 16),
                             OutlinedButton(
-                                onPressed: () => {
+                                onPressed: () {
                                   if(controller.isEmailValid.value){
+                                    SharedStore.setUserToken(emailController.text);
                                     Navigator.pushReplacementNamed(
-                                        context, POKEMON_LIST_ROUTE)
+                                        context, POKEMON_LIST_ROUTE);
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(content:
                                         Text("Email not valid!", textAlign: TextAlign.center,)
                                         )
-                                    )
+                                    );
                                   }
                                 },
                                 child: Container(
