@@ -1,59 +1,71 @@
-import 'dart:math';
-import 'package:hive/hive.dart';
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
-List<String> typesFromJson(List<dynamic> str) {
-  List<String> result = [];
-  str.forEach((element) {
-    result.add((((element as Map<String, dynamic>)['type']) as Map<String, dynamic>)['name'] ?? "");
-  });
-  return result;
-}
-@HiveType(typeId: 2, adapterName: "PokemonInfoTypeConverter")
-class PokemonInfo extends HiveObject {
-  PokemonInfo(
-  this.id,
-  this.name,
-  this.height,
-  this.weight,
-  this.base_experience,
-  this.types, {
-        this.hp = 0,
-        this.attack = 0,
-        this.defense = 0,
-        this.speed = 0,
-        this.exp = 0,
-      });
+part of 'pokemonInfo.dart';
 
-  @HiveField(0)
-  int id;
-  @HiveField(1)
-  String name;
-  @HiveField(2)
-  int height;
-  @HiveField(3)
-  int weight;
-  @HiveField(4)
-  int base_experience;
-  @HiveField(5)
-  List<String> types;
-  @HiveField(6)
-  int hp = Random.secure().nextInt(300);
-  @HiveField(7)
-  int attack = Random.secure().nextInt(300);
-  @HiveField(8)
-  int defense = Random.secure().nextInt(300);
-  @HiveField(9)
-  int speed = Random.secure().nextInt(300);
-  @HiveField(10)
-  int exp = Random.secure().nextInt(1000);
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
-  factory PokemonInfo.fromJson(Map<String, dynamic> json) => PokemonInfo(
-        json["id"],
-        json["name"],
-        json["height"],
-        json["weight"],
-        json["base_experience"],
-        typesFromJson(json["types"]),
-      );
+class PokemonInfoAdapter extends TypeAdapter<PokemonInfo> {
+  @override
+  final int typeId = 2;
 
+  @override
+  PokemonInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return PokemonInfo(
+      fields[0] as int,
+      fields[1] as String,
+      fields[2] as int,
+      fields[3] as int,
+      fields[4] as int,
+      (fields[5] as List).cast<String>(),
+      hp: fields[6] as int,
+      attack: fields[7] as int,
+      defense: fields[8] as int,
+      speed: fields[9] as int,
+      exp: fields[10] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, PokemonInfo obj) {
+    writer
+      ..writeByte(11)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.height)
+      ..writeByte(3)
+      ..write(obj.weight)
+      ..writeByte(4)
+      ..write(obj.base_experience)
+      ..writeByte(5)
+      ..write(obj.types)
+      ..writeByte(6)
+      ..write(obj.hp)
+      ..writeByte(7)
+      ..write(obj.attack)
+      ..writeByte(8)
+      ..write(obj.defense)
+      ..writeByte(9)
+      ..write(obj.speed)
+      ..writeByte(10)
+      ..write(obj.exp);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PokemonInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

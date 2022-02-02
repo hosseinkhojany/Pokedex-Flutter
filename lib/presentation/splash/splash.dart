@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:untitled1/appRouter.dart';
-import 'package:untitled1/utils/sharedStore.dart';
+import 'package:untitled1/data/datasource/local/sharedStore.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -30,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         child: Image.asset("assets/images/image1.jpg"),
       ),

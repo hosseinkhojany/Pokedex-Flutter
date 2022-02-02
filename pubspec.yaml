@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_cache_manager: ^3.3.0
+  palette_generator: ^0.3.2
+  hive_flutter: ^1.1.0
+  hive: ^2.0.5
   progress_dialog: ^1.2.4
   getwidget: ^2.0.4
   animations: ^2.0.2
@@ -58,7 +62,7 @@ dependencies:
 #  image_picker: ^0.8.0+4
 #  image_size_getter: ^1.0.0
 #  multi_image_picker: ^4.8.00
-#  path_provider: ^2.0.1
+  path_provider: ^2.0.1
 #  random_color: ^1.0.6-nullsafety
 #  sized_context: ^1.0.0+1
   shared_preferences: ^2.0.12
@@ -84,7 +88,8 @@ dev_dependencies:
 #  test: any
   flutter_test:
     sdk: flutter
-#  build_runner:
+  hive_generator: ^1.1.2
+  build_runner: ^2.1.7
 #  flutter_lints: ^1.0.0
 #  freezed: ^0.14.1
 #  freezed_annotation: ^1.1.0
@@ -114,3 +119,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/image1.jpg
+    - assets/images/ic_icon.png
+  fonts:
+    - family: ic_font
+      fonts:
+          - asset: assets/fonts/ic_font.ttf
