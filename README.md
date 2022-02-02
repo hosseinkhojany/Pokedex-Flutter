@@ -2,7 +2,7 @@
 
 Pokedex demonstrates modern Flutter development with GetX, Hive, Flow, Adaptive/Responsive Design, and Material Design based on MVVM architecture.
 <br /> <br /> 
-Main features: 
+<b>Main features:</b> <br /> 
 Offile-first <br /> 
 Lazy-Loading(Pagination) <br /> 
 Reactive State Managment(GetX) <br /> 
