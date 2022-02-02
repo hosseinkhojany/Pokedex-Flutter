@@ -1,30 +1,34 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+
 part 'pokemonInfo.g.dart';
 
 List<String> typesFromJson(List<dynamic> str) {
   List<String> result = [];
   str.forEach((element) {
-    result.add((((element as Map<String, dynamic>)['type']) as Map<String, dynamic>)['name'] ?? "");
+    result.add((((element as Map<String, dynamic>)['type'])
+            as Map<String, dynamic>)['name'] ??
+        "");
   });
   return result;
 }
+
 @HiveType(typeId: 2)
 class PokemonInfo extends HiveObject {
-  PokemonInfo(
-  this.id,
-  this.name,
-  this.height,
-  this.weight,
-  this.base_experience,
-  this.types, {
-        this.hp = 0,
-        this.attack = 0,
-        this.defense = 0,
-        this.speed = 0,
-        this.exp = 0,
-      });
+  PokemonInfo([
+    this.id = 0,
+    this.name = "",
+    this.height = 0,
+    this.weight = 0,
+    this.base_experience = 0,
+    this.types = const <String>[],
+    this.hp = 0,
+    this.attack = 0,
+    this.defense = 0,
+    this.speed = 0,
+    this.exp = 0]
+  );
 
   @HiveField(0)
   int id;
@@ -39,23 +43,26 @@ class PokemonInfo extends HiveObject {
   @HiveField(5)
   List<String> types;
   @HiveField(6)
-  int hp = Random.secure().nextInt(300);
+  int hp;
   @HiveField(7)
-  int attack = Random.secure().nextInt(300);
+  int attack;
   @HiveField(8)
-  int defense = Random.secure().nextInt(300);
+  int defense;
   @HiveField(9)
-  int speed = Random.secure().nextInt(300);
+  int speed;
   @HiveField(10)
-  int exp = Random.secure().nextInt(1000);
+  int exp;
 
   factory PokemonInfo.fromJson(Map<String, dynamic> json) => PokemonInfo(
-        json["id"],
-        json["name"],
-        json["height"],
-        json["weight"],
-        json["base_experience"],
-        typesFromJson(json["types"]),
-      );
-
+      json["id"],
+      json["name"],
+      json["height"],
+      json["weight"],
+      json["base_experience"],
+      typesFromJson(json["types"]),
+      Random.secure().nextInt(300),
+      Random.secure().nextInt(300),
+      Random.secure().nextInt(300),
+      Random.secure().nextInt(300),
+      Random.secure().nextInt(1000));
 }
