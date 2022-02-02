@@ -65,7 +65,7 @@ class PokemonDetail extends StatelessWidget {
                     FutureBuilder<PaletteGenerator>(
                       future: PaletteUtil.updatePaletteGenerator(pokemon.getImage()), // async work
                       builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
-                        Color pokemonColor = Colors.black12;
+                        Color pokemonColor = Color(pokemon.color);
                         if(snapshot.data?.dominantColor?.color != null){
                           pokemonColor = snapshot.data!.dominantColor!.color;
                           if(pokemon.color == Colors.black12.value){

@@ -33,42 +33,46 @@ class PokemonController extends GetxController {
   void onInit() {
     ever(_paginationFilter, (_) => _getNewPokemon());
     ever(_pokemonName, (_) => _getAPokemon());
-    _changePaginationFilter(1, 25);
+    _changePaginationFilter(0, 25);
     super.onInit();
   }
 
   Future<void> _getNewPokemon() async {
-    await _pokemonRepository.getNewListPokemon(
-      _paginationFilter.value,
-      start: () => {updateStateListPokemon(RequestState.LOADING)},
-      error: (error) {
-        updateStateListPokemon(RequestState.ERROR);
-      },
-      success: (listPokemons) {
-        if ((listPokemons as List<Pokemon>).isNotEmpty) {
-          _pokemons.addAll(listPokemons);
-          updateStateListPokemon(RequestState.SUCCESS);
-        } else {
-          _lastPage.value = true;
-        }
-      },
-    );
+    if(requestStateListPokmemon != RequestState.LOADING){
+      await _pokemonRepository.getNewListPokemon(
+        _paginationFilter.value,
+        start: () => {updateStateListPokemon(RequestState.LOADING)},
+        error: (error) {
+          updateStateListPokemon(RequestState.ERROR);
+        },
+        success: (listPokemons) {
+          if ((listPokemons as List<Pokemon>).isNotEmpty) {
+            _pokemons.addAll(listPokemons);
+            updateStateListPokemon(RequestState.SUCCESS);
+          } else {
+            _lastPage.value = true;
+          }
+        },
+      );
+    }
   }
 
   Future<void> _getAPokemon() async {
-    await _pokemonRepository.getAPokemonInfo(
-      _pokemonName.value,
-      start: () => {updateStateAPokemon(RequestState.LOADING)},
-      error: (error) {
-        updateStateAPokemon(RequestState.ERROR);
-      },
-      success: (pokemonInfoResponse) {
-        if ((pokemonInfoResponse is PokemonInfo)) {
-          _currentPokemonInfo.value = pokemonInfoResponse;
-          updateStateAPokemon(RequestState.SUCCESS);
-        }
-      },
-    );
+    if(requestStateAPokemon != RequestState.LOADING){
+      await _pokemonRepository.getAPokemonInfo(
+        _pokemonName.value,
+        start: () => {updateStateAPokemon(RequestState.LOADING)},
+        error: (error) {
+          updateStateAPokemon(RequestState.ERROR);
+        },
+        success: (pokemonInfoResponse) {
+          if ((pokemonInfoResponse is PokemonInfo)) {
+            _currentPokemonInfo.value = pokemonInfoResponse;
+            updateStateAPokemon(RequestState.SUCCESS);
+          }
+        },
+      );
+    }
   }
 
   void _changePaginationFilter(int page, int limit) {

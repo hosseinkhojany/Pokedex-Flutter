@@ -14,7 +14,7 @@ class PokemonDs{
     try{
       var response = await _dio.get('/pokemon', queryParameters: {
         'limit': filter.limit,
-        'offset': filter.page
+        'offset': filter.page * filter.limit
       });
       if (response.statusCode == 200) {
         return PokemonResponse.fromJson(response.data, filter.page);

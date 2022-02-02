@@ -23,11 +23,11 @@ class PokemonInfoAdapter extends TypeAdapter<PokemonInfo> {
       fields[3] as int,
       fields[4] as int,
       (fields[5] as List).cast<String>(),
-      hp: fields[6] as int,
-      attack: fields[7] as int,
-      defense: fields[8] as int,
-      speed: fields[9] as int,
-      exp: fields[10] as int,
+      fields[6] as int,
+      fields[7] as int,
+      fields[8] as int,
+      fields[9] as int,
+      fields[10] as int,
     );
   }
 
