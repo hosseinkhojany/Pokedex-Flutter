@@ -34,7 +34,7 @@ class PokemonListScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: SizedBox(
-                        height: 40,
+                        height: 20,
                         child: Center(
                           child: Stack(
                             children: [
@@ -135,9 +135,8 @@ class PokemonListScreen extends StatelessWidget {
                   transitionType: ContainerTransitionType.fade,
                   closedShape: const RoundedRectangleBorder(),
                   closedElevation: 0,
-                  openBuilder: (context, openContainer) => PokemonDetail(
-                    pokemon: pokemon,
-                  ),
+                  openBuilder: (context, openContainer) =>
+                      PokemonDetail(pokemon: pokemon),
                   closedBuilder: (context, openContainer) {
                     return InkWell(
                       onTap: () => openContainer.call(),
@@ -159,17 +158,31 @@ class PokemonListScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        pokemon.name,
-                                        style: TextStyle(fontSize: 18),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              spreadRadius: 15,
+                                              color: Color(0xffE0FBFC)
+                                                  .withOpacity(0.4)),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                      child: Text(
+                                        pokemon.name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

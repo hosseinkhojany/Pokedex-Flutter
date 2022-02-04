@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:untitled1/data/model/pokemon.dart';
 import 'package:untitled1/data/model/pokemonInfo.dart';
-import 'package:untitled1/data/model/pokemonResponse.dart';
 import 'package:untitled1/data/repository/pokemonRepo.dart';
 
 import '../data/config/paginationFilter.dart';
@@ -38,7 +37,7 @@ class PokemonController extends GetxController {
   }
 
   Future<void> _getNewPokemon() async {
-    if(requestStateListPokmemon != RequestState.LOADING){
+    if (requestStateListPokmemon != RequestState.LOADING) {
       await _pokemonRepository.getNewListPokemon(
         _paginationFilter.value,
         start: () => {updateStateListPokemon(RequestState.LOADING)},
@@ -58,7 +57,7 @@ class PokemonController extends GetxController {
   }
 
   Future<void> _getAPokemon() async {
-    if(requestStateAPokemon != RequestState.LOADING){
+    if (requestStateAPokemon != RequestState.LOADING) {
       await _pokemonRepository.getAPokemonInfo(
         _pokemonName.value,
         start: () => {updateStateAPokemon(RequestState.LOADING)},
@@ -83,7 +82,8 @@ class PokemonController extends GetxController {
   }
 
   void updatePokemonColor(int page, String pokemonName, int color) async {
-    await _pokemonRepository.updatePokemonColor(page, pokemonName, color, start:()=>{}, error:(error)=>{}, success:(response)=>{});
+    await _pokemonRepository.updatePokemonColor(page, pokemonName, color,
+        start: () => {}, error: (error) => {}, success: (response) => {});
   }
 
   void updateStateListPokemon(RequestState state) {

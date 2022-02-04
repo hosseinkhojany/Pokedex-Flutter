@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:untitled1/appRouter.dart';
 import 'package:untitled1/data/config/hive/hiveConfig.dart';
 import 'package:untitled1/data/datasource/local/sharedStore.dart';
@@ -8,7 +7,6 @@ import 'package:untitled1/data/datasource/local/sharedStore.dart';
 import 'bindings/appBinding.dart';
 
 void main() async {
-
   await HiveConfig.init();
 
   runApp(MyApp(
@@ -17,7 +15,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   final AppRouter router;
   const MyApp({Key? key, required this.router}) : super(key: key);
 
@@ -27,10 +24,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'ic_font',
-        primarySwatch: Colors.blue,
-      ),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: 'ic_font',
+          primarySwatch: Colors.blue,
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Color(0xff293241),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+               fontFamily: 'ic_font'
+            )
+          ),
+          colorScheme: ColorScheme.light(
+            primary: Color(0xff293241)
+          )),
       // home: _buildStack()
       initialRoute: SPLASH_ROUTE,
       initialBinding: AppBinding(),
@@ -38,7 +47,4 @@ class MyApp extends StatelessWidget {
       // getPages: routes,
     );
   }
-
-
-
 }
