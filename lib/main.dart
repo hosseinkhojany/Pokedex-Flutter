@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:untitled1/appRouter.dart';
 import 'package:untitled1/data/config/hive/hiveConfig.dart';
-import 'package:untitled1/data/datasource/local/sharedStore.dart';
 
 import 'bindings/appBinding.dart';
 

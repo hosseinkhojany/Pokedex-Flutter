@@ -38,7 +38,9 @@ class SignUpScreen extends StatelessWidget {
                 child: GetBuilder<LoginController>(
                     builder: (controller) => Center(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 450),
+                    constraints: BoxConstraints(maxWidth:
+                    useVerticalLayout ? screenSize.width * 0.80 : screenSize.width * 0.40
+                    ),
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
