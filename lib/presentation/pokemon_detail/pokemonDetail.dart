@@ -60,7 +60,7 @@ class PokemonDetail extends StatelessWidget {
                             : Radius.circular(50),
                       ),
                     ),
-                    shadowColor: Colors.deepOrangeAccent,
+                    shadowColor: Theme.of(context).colorScheme.primary,
                     child: FutureBuilder<PaletteGenerator>(
                       future: PaletteUtil.updatePaletteGenerator(
                           pokemon.getImage()), // async work
@@ -68,7 +68,6 @@ class PokemonDetail extends StatelessWidget {
                         Color pokemonColor = Color(pokemon.color);
                         if (snapshot.data?.dominantColor?.color != null) {
                           pokemonColor = snapshot.data!.dominantColor!.color;
-                          debugPrint('dominantColor: $pokemonColor');
                           if (pokemon.color == Colors.black12.value) {
                             _controller.updatePokemonColor(
                                 pokemon.page,
@@ -77,7 +76,7 @@ class PokemonDetail extends StatelessWidget {
                           }
                         }
                         return Container(
-                          color: pokemonColor,
+                          color: pokemonColor.withOpacity(0.85),
                           child: Column(
                             children: [
                               Expanded(

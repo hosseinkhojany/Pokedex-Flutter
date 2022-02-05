@@ -11,12 +11,12 @@ class PokemonRepository {
 
   Future<void> getNewListPokemon(PaginationFilter filter,
       {required Function start,
-        required Function error,
-        required Function success}) async {
+      required Function error,
+      required Function success}) async {
     start.call();
     try {
       var localData = await PokemonBox.getListPokemon(filter.page);
-      if(localData.isEmpty){
+      if (localData.isEmpty) {
         PokemonResponse? response = await pokemonDs.fetchNewListPokemon(filter);
         if ((response is ErrorResponse == false) && response != null) {
           success.call(response.results);
@@ -24,7 +24,7 @@ class PokemonRepository {
         } else {
           error.call((response as ErrorResponse).message);
         }
-      }else{
+      } else {
         success.call(localData);
       }
     } catch (e) {
@@ -39,7 +39,7 @@ class PokemonRepository {
     start.call();
     try {
       var localData = await PokemonBox.getPokemonInfo(name);
-      if(localData == null){
+      if (localData == null) {
         var response = await pokemonDs.fetchAPokemonInfo(name);
         if ((response is ErrorResponse) == false) {
           success.call(response);
@@ -47,7 +47,7 @@ class PokemonRepository {
         } else {
           error.call((response as ErrorResponse).message);
         }
-      }else{
+      } else {
         success.call(localData);
       }
     } catch (e) {
@@ -55,21 +55,19 @@ class PokemonRepository {
     }
   }
 
-  Future<void> updatePokemonColor(
-      int page,
-      String pokemonName,
-      int color,
+  Future<void> updatePokemonColor(int page, String pokemonName, int color,
       {required Function start,
       required Function error,
       required Function success}) async {
     start.call();
     try {
-        var response = await PokemonBox.updatePokemonColor(page, pokemonName, color);
-        if ((response is ErrorResponse) == false) {
-          success.call(response);
-        } else {
-          error.call((response as ErrorResponse).message);
-        }
+      var response =
+          await PokemonBox.updatePokemonColor(page, pokemonName, color);
+      if ((response is ErrorResponse) == false) {
+        success.call(response);
+      } else {
+        error.call((response as ErrorResponse).message);
+      }
     } catch (e) {
       error.call("try again");
     }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:untitled1/controller/pokemonContoller.dart';
 import 'package:untitled1/presentation/pokemon_detail/pokemonDetail.dart';
 import 'package:untitled1/utils/consts.dart';
@@ -153,6 +154,29 @@ class PokemonListScreen extends StatelessWidget {
                                 child: CachedNetworkImage(
                                   imageUrl: pokemon.getImage(),
                                   width: 90,
+                                  placeholder: (context, url) {
+                                    return Center(
+                                      child: SkeletonGridLoader(
+                                        builder: GridTile(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              CircleAvatar(radius: 40),
+                                            ],
+                                          ),
+                                        ),
+                                        items: 1,
+                                        itemsPerRow: 1,
+                                        period: Duration(milliseconds: 2500),
+                                        baseColor: Color(pokemon.color).withOpacity(0.1),
+                                        highlightColor: Colors.black26,
+                                        direction: SkeletonDirection.ltr,
+                                        childAspectRatio: 1,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -168,7 +192,9 @@ class PokemonListScreen extends StatelessWidget {
                                           BoxShadow(
                                               blurRadius: 10,
                                               spreadRadius: 15,
-                                              color: Color(0xffE0FBFC)
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
                                                   .withOpacity(0.4)),
                                         ],
                                       ),

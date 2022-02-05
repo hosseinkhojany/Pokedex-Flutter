@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled1/appRouter.dart';
 import 'package:untitled1/data/config/hive/hiveConfig.dart';
-import 'package:untitled1/data/datasource/local/sharedStore.dart';
 
 import 'bindings/appBinding.dart';
 
@@ -38,7 +37,8 @@ class MyApp extends StatelessWidget {
             )
           ),
           colorScheme: ColorScheme.light(
-            primary: Color(0xff293241)
+            primary: Color(0xff293241),
+            secondary: Color(0xffE0FBFC)
           )),
       // home: _buildStack()
       initialRoute: SPLASH_ROUTE,

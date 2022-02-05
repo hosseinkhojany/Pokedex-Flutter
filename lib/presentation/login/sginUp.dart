@@ -21,7 +21,7 @@ class SignUpScreen extends StatelessWidget {
               Flexible(
                   child: Container(
                 alignment: Alignment.center,
-                color: Colors.grey.shade300,
+                color: Color(0xffE0FBFC),
                 child: Text(
                   "LOGIN VIEW\nBRANDING",
                   style: useVerticalLayout
@@ -44,7 +44,7 @@ class SignUpScreen extends StatelessWidget {
                                     RoundedInputField(
                                       controller: emailController,
                                       hintText: "Enter valid email...",
-                                    inputType: TextInputType.emailAddress,
+                                      inputType: TextInputType.emailAddress,
                                       icon: !controller.isEmailValid.value
                                           ? Icons.error
                                           : Icons.email,
@@ -52,7 +52,6 @@ class SignUpScreen extends StatelessWidget {
                                         controller
                                             .updateEmailValidateState(text)
                                       },
-                                      
                                     ),
                                     SizedBox(height: 16),
                                     RoundedInputField(
@@ -61,29 +60,37 @@ class SignUpScreen extends StatelessWidget {
                                       inputType: TextInputType.text,
                                       onChanged: (text) {},
                                     ),
-                                    SizedBox(height: 16),
+                                    SizedBox(height: 50),
                                     OutlinedButton(
-                                        onPressed: () {
-                                          if (controller.isEmailValid.value) {
-                                            SharedStore.setUserToken(
-                                                emailController.text);
-                                            Navigator.pushReplacementNamed(
-                                                context, POKEMON_LIST_ROUTE);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                              "Email not valid!",
-                                              textAlign: TextAlign.center,
-                                            )));
-                                          }
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          alignment: Alignment.center,
-                                          padding: EdgeInsets.all(16.0),
-                                          child: Text("Log In"),
-                                        )),
+                                      onPressed: () {
+                                        if (controller.isEmailValid.value) {
+                                          SharedStore.setUserToken(
+                                              emailController.text);
+                                          Navigator.pushReplacementNamed(
+                                              context, POKEMON_LIST_ROUTE);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                            "Email not valid!",
+                                            textAlign: TextAlign.center,
+                                          )));
+                                        }
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Text(
+                                          "Log In",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
