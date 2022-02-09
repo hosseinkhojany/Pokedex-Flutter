@@ -3,11 +3,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:untitled1/controller/pokemonContoller.dart';
+import 'package:untitled1/data/model/pokemon.dart';
 import 'package:untitled1/presentation/pokemon_detail/pokemonDetail.dart';
 import 'package:untitled1/utils/consts.dart';
+import 'package:untitled1/utils/paletteUtil.dart';
 
 class PokemonListScreen extends StatelessWidget {
   final PokemonController _controller;
@@ -19,6 +22,7 @@ class PokemonListScreen extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     int crossAxisCount = (screenSize.width / 200).round();
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(
           padding: EdgeInsets.all(5),
@@ -122,107 +126,155 @@ class PokemonListScreen extends StatelessWidget {
           _controller.pokemons.length,
           (index) {
             final pokemon = _controller.pokemons[index];
-            return Card(
-              color: Colors.black12,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              clipBehavior: Clip.antiAlias,
-              elevation: 5,
-              child: SizedBox(
-                width: 150,
-                height: 200,
-                child: OpenContainer<bool>(
-                  tappable: false,
-                  transitionType: ContainerTransitionType.fade,
-                  closedShape: const RoundedRectangleBorder(),
-                  closedElevation: 0,
-                  openBuilder: (context, openContainer) =>
-                      PokemonDetail(pokemon: pokemon),
-                  closedBuilder: (context, openContainer) {
-                    return InkWell(
-                      onTap: () => openContainer.call(),
-                      child: Container(
-                        color: pokemon.color == 0
-                            ? Colors.black12
-                            : Color(pokemon.color),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 150,
-                              child: Center(
-                                child: CachedNetworkImage(
-                                  imageUrl: pokemon.getImage(),
-                                  width: 90,
-                                  placeholder: (context, url) {
-                                    return Center(
-                                      child: SkeletonGridLoader(
-                                        builder: GridTile(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              CircleAvatar(radius: 40),
-                                            ],
-                                          ),
-                                        ),
-                                        items: 1,
-                                        itemsPerRow: 1,
-                                        period: Duration(milliseconds: 2500),
-                                        baseColor: Color(pokemon.color).withOpacity(0.1),
-                                        highlightColor: Colors.black26,
-                                        direction: SkeletonDirection.ltr,
-                                        childAspectRatio: 1,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 10,
-                                              spreadRadius: 15,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                                  .withOpacity(0.4)),
-                                        ],
-                                      ),
-                                      child: Text(
-                                        pokemon.name,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            return FutureBuilder<PaletteGenerator>(
+              future: PaletteUtil.updatePaletteGenerator(pokemon.getImage()),
+              builder: (context, snapshot) {
+                if (pokemon.color != Colors.black12.value) {
+                  return _PokemonItem(
+                      pokemon: pokemon, dominantColor: Color(pokemon.color));
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return SizedBox();
+                } else {
+                  PokemonController _controller = Get.find();
+                  var dominantColor =
+                      (snapshot.data as PaletteGenerator).dominantColor!.color;
+                  _controller.updatePokemonColor(
+                      pokemon.page, pokemon.name, dominantColor.value);
+
+                  return _PokemonItem(
+                      pokemon: pokemon, dominantColor: dominantColor);
+                }
+              },
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class _PokemonItem extends StatelessWidget {
+  const _PokemonItem({
+    Key? key,
+    required this.pokemon,
+    required this.dominantColor,
+  }) : super(key: key);
+
+  final Pokemon pokemon;
+  final Color dominantColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    return Stack(
+      children: [
+        Container(
+            width: 160,
+            height: 210,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Color(pokemon.color).withOpacity(0.6),
+                blurRadius: 15,
+              )
+            ])),
+        Card(
+          color: Colors.black12,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          clipBehavior: Clip.antiAlias,
+          child: SizedBox(
+            width: 150,
+            height: 200,
+            child: OpenContainer<bool>(
+              tappable: false,
+              transitionType: ContainerTransitionType.fade,
+              closedShape: const RoundedRectangleBorder(),
+              closedElevation: 0,
+              openBuilder: (context, openContainer) =>
+                  PokemonDetail(pokemon: pokemon),
+              closedBuilder: (context, openContainer) {
+                return InkWell(
+                  onTap: () => openContainer.call(),
+                  child: Container(
+                    color: dominantColor.withOpacity(0.7),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          child: Center(
+                            child: CachedNetworkImage(
+                              imageUrl: pokemon.getImage(),
+                              width: 90,
+                              placeholder: (context, url) {
+                                return Center(
+                                  child: SkeletonGridLoader(
+                                    builder: GridTile(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.asset(
+                                              "assets/images/pokemon.png"),
+                                        ],
+                                      ),
+                                    ),
+                                    items: 1,
+                                    itemsPerRow: 1,
+                                    period: Duration(milliseconds: 2500),
+                                    baseColor:
+                                        Color(pokemon.color).withOpacity(0.1),
+                                    highlightColor: Colors.black26,
+                                    direction: SkeletonDirection.ltr,
+                                    childAspectRatio: 1,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          blurRadius: 10,
+                                          spreadRadius: 15,
+                                          color: Color(pokemon.color)
+                                              .withOpacity(0.4)),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    pokemon.name,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: themeData.colorScheme.primary),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

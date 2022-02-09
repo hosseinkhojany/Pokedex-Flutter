@@ -12,15 +12,15 @@ class PaletteUtil {
     return paletteGenerator;
   }
 
-  // FutureBuilder<PaletteGenerator>(
-  //   future: _updatePaletteGenerator(imageUrl), // async work
-  //   builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
-  //     if(snapshot.data?.dominantColor?.color == true){
-  //       return Container(color: snapshot.data?.dominantColor?.color,);
-  //     }else{
-  //       return Container(color: snapshot.data?.dominantColor?.color,);
-  //     }
-  //   },
-  // );
+// FutureBuilder<PaletteGenerator>(
+//   future: _updatePaletteGenerator(imageUrl), // async work
+//   builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
+//     if(snapshot.data?.dominantColor?.color == true){
+//       return Container(color: snapshot.data?.dominantColor?.color,);
+//     }else{
+//       return Container(color: snapshot.data?.dominantColor?.color,);
+//     }
+//   },
+// );
 
 }
