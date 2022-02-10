@@ -27,15 +27,15 @@ class PokemonDetail extends StatelessWidget {
     return Scaffold(
       appBar: hideDetailPanel
           ? AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        shadowColor: Colors.transparent,
-        backgroundColor: Colors.grey.shade300,
-        centerTitle: true,
-        title: Text(pokemon.name),
-        titleTextStyle: TextStyle(
-          color: Colors.black,
-        ),
-      )
+              iconTheme: IconThemeData(color: Colors.black),
+              shadowColor: Colors.transparent,
+              backgroundColor: Colors.grey.shade300,
+              centerTitle: true,
+              title: Text(pokemon.name),
+              titleTextStyle: TextStyle(
+                color: Colors.black,
+              ),
+            )
           : null,
       body: SafeArea(
         child: Flex(
@@ -60,78 +60,80 @@ class PokemonDetail extends StatelessWidget {
                             : Radius.circular(50),
                       ),
                     ),
-                    shadowColor: Colors.deepOrangeAccent,
-                    child:
-                    FutureBuilder<PaletteGenerator>(
-                      future: PaletteUtil.updatePaletteGenerator(pokemon.getImage()), // async work
-                      builder: (BuildContext context, AsyncSnapshot<PaletteGenerator> snapshot) {
+                    shadowColor: Theme.of(context).colorScheme.primary,
+                    child: FutureBuilder<PaletteGenerator>(
+                      future: PaletteUtil.updatePaletteGenerator(
+                          pokemon.getImage()), // async work
+                      builder: (context, snapshot) {
                         Color pokemonColor = Color(pokemon.color);
-                        if(snapshot.data?.dominantColor?.color != null){
+                        if (snapshot.data?.dominantColor?.color != null) {
                           pokemonColor = snapshot.data!.dominantColor!.color;
-                          if(pokemon.color == Colors.black12.value){
-                            _controller.updatePokemonColor(pokemon.page, pokemon.name, snapshot.data!.dominantColor!.color.value);
+                          if (pokemon.color == Colors.black12.value) {
+                            _controller.updatePokemonColor(
+                                pokemon.page,
+                                pokemon.name,
+                                snapshot.data!.dominantColor!.color.value);
                           }
                         }
-                        return
-                          Container(
-                            color: pokemonColor,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.black12,
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 15),
-                                            child: IconButton(
-                                              tooltip: "back",
-                                              icon: Icon(Icons.arrow_back_rounded),
-                                              onPressed: () => {
-                                                Navigator.pop(context),
-                                              },
-                                            ),
+                        return Container(
+                          color: pokemonColor.withOpacity(0.85),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: Colors.black12,
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: IconButton(
+                                            tooltip: "back",
+                                            icon:
+                                                Icon(Icons.arrow_back_rounded),
+                                            onPressed: () => {
+                                              Navigator.pop(context),
+                                            },
                                           ),
                                         ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            pokemon.name,
-                                            style: TextStyle(
-                                              fontSize: 30.0,
-                                              color: Colors.black,
-                                            ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          pokemon.name,
+                                          style: TextStyle(
+                                            fontSize: 30.0,
+                                            color: Colors.black,
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 5,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.black12,
-                                    child: CachedNetworkImage(
-                                      imageUrl: pokemon.getImage(),
-                                    ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: Colors.black12,
+                                  child: CachedNetworkImage(
+                                    imageUrl: pokemon.getImage(),
                                   ),
                                 ),
-                              ],
-                            ),
-                          );
+                              ),
+                            ],
+                          ),
+                        );
                       },
-                    )
-                ),
+                    )),
               ),
             ],
             Flexible(
               child: Obx(
-                    () {
+                () {
                   PokemonInfo pokemonInfo = _controller.currentPokemonInfo;
                   switch (_controller.requestStateAPokemon.value) {
                     case RequestState.LOADING:
@@ -159,7 +161,7 @@ class PokemonDetail extends StatelessWidget {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       for (var i in pokemonInfo.types)
                                         Card(
@@ -179,13 +181,13 @@ class PokemonDetail extends StatelessWidget {
                                   SizedBox(height: 25.0),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Column(
                                         children: [
                                           Text(
                                             (pokemonInfo.weight / 10)
-                                                .toString() +
+                                                    .toString() +
                                                 " KG",
                                             style: new TextStyle(
                                               fontSize: 25.0,
@@ -200,7 +202,7 @@ class PokemonDetail extends StatelessWidget {
                                         children: [
                                           Text(
                                             (pokemonInfo.height / 10)
-                                                .toString() +
+                                                    .toString() +
                                                 " M",
                                             style: TextStyle(
                                               fontSize: 25.0,
@@ -251,7 +253,8 @@ class PokemonDetail extends StatelessWidget {
     );
   }
 
-  Widget ability(String abilityName, int abilityValue, [int maxAbilityValue = 300]) {
+  Widget ability(String abilityName, int abilityValue,
+      [int maxAbilityValue = 300]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -281,7 +284,9 @@ class PokemonDetail extends StatelessWidget {
                       progressBarColor: GFColors.DANGER),
                   Align(
                     alignment: Alignment.center,
-                    child: Text(maxAbilityValue.toString()+"/" + abilityValue.toString()),
+                    child: Text(maxAbilityValue.toString() +
+                        "/" +
+                        abilityValue.toString()),
                   ),
                 ],
               ),

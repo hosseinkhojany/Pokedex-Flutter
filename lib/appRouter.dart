@@ -14,7 +14,6 @@ const String POKEMON_LIST_ROUTE = "/pokemons_list";
 const String POKEMON_DETAIL_ROUTE = "/pokemon_detail";
 
 class AppRouter {
-
   SharedAxisTransition globalTransaction(
       context, animation, secondaryAnimation, child) {
     return SharedAxisTransition(
