@@ -1,40 +1,73 @@
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:untitled1/controller/pokemonContoller.dart';
 import 'package:untitled1/data/model/pokemon.dart';
 import 'package:untitled1/presentation/pokemon_detail/pokemonDetail.dart';
 import 'package:untitled1/utils/consts.dart';
 import 'package:untitled1/utils/paletteUtil.dart';
+import 'package:untitled1/utils/theme_util.dart';
 
-class PokemonListScreen extends StatelessWidget {
+class PokemonListScreen extends StatefulWidget {
   final PokemonController _controller;
 
   const PokemonListScreen(this._controller, {Key? key}) : super(key: key);
 
   @override
+  State<PokemonListScreen> createState() => _PokemonListScreenState();
+}
+
+class _PokemonListScreenState extends State<PokemonListScreen> {
+  var _enableDarkTheme = true;
+
+  @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-    int crossAxisCount = (screenSize.width / 200).round();
+    final themeData = Theme.of(context);
+
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    _enableDarkTheme = (themeNotifier.getTheme() == darkTheme);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeData.colorScheme.background,
       appBar: AppBar(
         leading: Padding(
           padding: EdgeInsets.all(5),
           child: Image.asset("assets/images/ic_icon.png"),
         ),
         title: Text("Pokedex Flutter"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: SizedBox(
+              width: 60,
+              child: DayNightSwitcher(
+                isDarkModeEnabled: _enableDarkTheme,
+                sunColor: Colors.yellow,
+                onStateChanged: (val) {
+                  debugPrint('onStateChanged: $val');
+                  setState(() {
+                    _enableDarkTheme = val;
+                  });
+                  onThemeChanged(val, themeNotifier);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       body: Obx(
         () {
-          switch (_controller.requestStateListPokmemon.value) {
+          switch (widget._controller.requestStateListPokmemon.value) {
             case RequestState.LOADING:
-              if (_controller.pokemons.length > 0) {
+              if (widget._controller.pokemons.length > 0) {
                 WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -65,7 +98,7 @@ class PokemonListScreen extends StatelessWidget {
                 );
               }
             case RequestState.ERROR:
-              if (_controller.pokemons.length > 0) {
+              if (widget._controller.pokemons.length > 0) {
                 WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -80,7 +113,8 @@ class PokemonListScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerRight,
                               child: IconButton(
-                                onPressed: () => {_controller.loadNextPage()},
+                                onPressed: () =>
+                                    {widget._controller.loadNextPage()},
                                 icon: Icon(
                                   Icons.refresh_rounded,
                                   color: Colors.white,
@@ -100,12 +134,11 @@ class PokemonListScreen extends StatelessWidget {
                     tooltip: "retry",
                     icon: Icon(Icons.refresh_outlined),
                     onPressed: () => {
-                      _controller.loadNextPage(true),
+                      widget._controller.loadNextPage(true),
                     },
                   ),
                 );
               }
-
             default:
               return _mainContent();
           }
@@ -114,18 +147,28 @@ class PokemonListScreen extends StatelessWidget {
     );
   }
 
+  void onThemeChanged(bool value, ThemeNotifier themeNotifier) async {
+    (value)
+        ? themeNotifier.setTheme(darkTheme)
+        : themeNotifier.setTheme(lightTheme);
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setBool('darkMode', value);
+  }
+
   Widget _mainContent() {
     return LazyLoadScrollView(
-      onEndOfPage: _controller.loadNextPage,
-      isLoading: _controller.lastPage,
-      child: ResponsiveGridList(
+      onEndOfPage: widget._controller.loadNextPage,
+      isLoading: widget._controller.lastPage,
+      child:
+       ResponsiveGridList(
         horizontalGridMargin: 10,
         verticalGridMargin: 10,
         minItemWidth: 150,
         children: List.generate(
-          _controller.pokemons.length,
+          widget._controller.pokemons.length,
           (index) {
-            final pokemon = _controller.pokemons[index];
+            final pokemon = widget._controller.pokemons[index];
+            
             return FutureBuilder<PaletteGenerator>(
               future: PaletteUtil.updatePaletteGenerator(pokemon.getImage()),
               builder: (context, snapshot) {
@@ -141,7 +184,6 @@ class PokemonListScreen extends StatelessWidget {
                       (snapshot.data as PaletteGenerator).dominantColor!.color;
                   _controller.updatePokemonColor(
                       pokemon.page, pokemon.name, dominantColor.value);
-
                   return _PokemonItem(
                       pokemon: pokemon, dominantColor: dominantColor);
                 }
@@ -166,8 +208,6 @@ class _PokemonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return Stack(
       children: [
         Container(
@@ -212,16 +252,18 @@ class _PokemonItem extends StatelessWidget {
                               placeholder: (context, url) {
                                 return Center(
                                   child: SkeletonGridLoader(
-                                    builder: GridTile(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Image.asset(
-                                              "assets/images/pokemon.png"),
-                                        ],
+                                    builder: SingleChildScrollView(
+                                      child: GridTile(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                                "assets/images/pokemon.png"),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     items: 1,
@@ -258,8 +300,9 @@ class _PokemonItem extends StatelessWidget {
                                     pokemon.name,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        color: themeData.colorScheme.primary),
+                                      fontSize: 18,
+                                      color: Color(0xff293241),
+                                    ),
                                   ),
                                 ),
                               ],

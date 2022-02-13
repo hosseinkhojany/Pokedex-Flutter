@@ -102,5 +102,3 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-InputDecoration _getTextDecoration(String hint) =>
-    InputDecoration(border: OutlineInputBorder(), hintText: hint);

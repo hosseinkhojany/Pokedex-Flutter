@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled1/presentation/login/sginUp.dart';
 import 'package:untitled1/presentation/login/signIn.dart';
-import 'package:untitled1/presentation/pokemon_detail/pokemonDetail.dart';
 import 'package:untitled1/presentation/pokemon_list/pokemonList.dart';
 import 'package:untitled1/presentation/splash/splash.dart';
 

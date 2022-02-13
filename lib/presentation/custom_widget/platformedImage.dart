@@ -18,7 +18,6 @@ class PlatformedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     if (kIsWeb || Platform.isFuchsia || Platform.isLinux || Platform.isWindows) {
       return Image.network(
         imageUrl,

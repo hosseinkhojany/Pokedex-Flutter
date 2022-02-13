@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/presentation/custom_widget/text_field_container.dart';
-import 'package:untitled1/utils/consts.dart';
 
 class RoundedInputField extends StatelessWidget {
   final String hintText;
@@ -20,16 +19,18 @@ class RoundedInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeData = Theme.of(context);
     return TextFieldContainer(
       child: TextField(
         controller: controller,
         onChanged: onChanged,
-        cursorColor: kPrimaryColor,
+        cursorColor: themeData.colorScheme.surface,
         keyboardType: inputType,
         decoration: InputDecoration(
           icon: Icon(
             icon,
-            color: kPrimaryColor,
+            color: themeData.colorScheme.surface,
           ),
           hintText: hintText,
           border: InputBorder.none,
