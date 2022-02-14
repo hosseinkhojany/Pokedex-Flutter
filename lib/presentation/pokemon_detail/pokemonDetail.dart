@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:untitled1/controller/pokemonContoller.dart';
 import 'package:untitled1/data/model/pokemon.dart';
 import 'package:untitled1/utils/consts.dart';
-import 'package:untitled1/utils/paletteUtil.dart';
 
 import '../../data/model/pokemonInfo.dart';
 
@@ -20,20 +18,24 @@ class PokemonDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     Size screenSize = MediaQuery.of(context).size;
     bool useVerticalLayout = screenSize.width < screenSize.height;
     bool hideDetailPanel = screenSize.shortestSide < 250;
     _controller.loadPokemonInfo(pokemon.name);
     return Scaffold(
+      backgroundColor: themeData.colorScheme.background,
       appBar: hideDetailPanel
           ? AppBar(
               iconTheme: IconThemeData(color: Colors.black),
               shadowColor: Colors.transparent,
               backgroundColor: Colors.grey.shade300,
               centerTitle: true,
-              title: Text(pokemon.name),
+              title: Text(
+                pokemon.name,
+              ),
               titleTextStyle: TextStyle(
-                color: Colors.black,
+                color: themeData.primaryColor,
               ),
             )
           : null,
@@ -43,92 +45,89 @@ class PokemonDetail extends StatelessWidget {
           children: [
             if (hideDetailPanel == false) ...[
               Flexible(
-                child: Card(
-                    margin: EdgeInsets.zero,
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: useVerticalLayout
-                            ? Radius.circular(50)
-                            : Radius.circular(0),
-                        bottomRight: Radius.circular(50),
-                        topLeft: useVerticalLayout
-                            ? Radius.circular(0)
-                            : Radius.circular(0),
-                        topRight: useVerticalLayout
-                            ? Radius.circular(0)
-                            : Radius.circular(50),
-                      ),
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                            color: Color(pokemon.color),
+                            blurRadius: 20,
+                            offset: Offset(0.0, 1))
+                      ]),
                     ),
-                    shadowColor: Theme.of(context).colorScheme.primary,
-                    child: FutureBuilder<PaletteGenerator>(
-                      future: PaletteUtil.updatePaletteGenerator(
-                          pokemon.getImage()), // async work
-                      builder: (context, snapshot) {
-                        Color pokemonColor = Color(pokemon.color);
-                        if (snapshot.data?.dominantColor?.color != null) {
-                          pokemonColor = snapshot.data!.dominantColor!.color;
-                          if (pokemon.color == Colors.black12.value) {
-                            _controller.updatePokemonColor(
-                                pokemon.page,
-                                pokemon.name,
-                                snapshot.data!.dominantColor!.color.value);
-                          }
-                        }
-                        return Container(
-                          color: pokemonColor.withOpacity(0.85),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  color: Colors.black12,
-                                  child: Stack(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: IconButton(
-                                            tooltip: "back",
-                                            icon:
-                                                Icon(Icons.arrow_back_rounded),
-                                            onPressed: () => {
-                                              Navigator.pop(context),
-                                            },
+                    Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: useVerticalLayout
+                              ? Radius.circular(50)
+                              : Radius.circular(0),
+                          bottomRight: Radius.circular(50),
+                          topLeft: useVerticalLayout
+                              ? Radius.circular(0)
+                              : Radius.circular(0),
+                          topRight: useVerticalLayout
+                              ? Radius.circular(0)
+                              : Radius.circular(50),
+                        ),
+                      ),
+                      shadowColor: Theme.of(context).colorScheme.primary,
+                      child: Container(
+                        color: Color(pokemon.color).withOpacity(0.6),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                alignment: Alignment.center,
+                                color: Colors.black12,
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: IconButton(
+                                          tooltip: "back",
+                                          icon: Icon(
+                                            Icons.arrow_back_rounded,
                                           ),
+                                          onPressed: () => {
+                                            Navigator.pop(context),
+                                          },
                                         ),
                                       ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          pokemon.name,
-                                          style: TextStyle(
-                                            fontSize: 30.0,
-                                            color: Colors.black,
-                                          ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        pokemon.name,
+                                        style: TextStyle(
+                                          fontSize: 30.0,
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                flex: 5,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  color: Colors.black12,
-                                  child: CachedNetworkImage(
-                                    imageUrl: pokemon.getImage(),
-                                  ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                alignment: Alignment.center,
+                                color: Colors.black12,
+                                child: CachedNetworkImage(
+                                  imageUrl: pokemon.getImage(),
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
             Flexible(
@@ -186,31 +185,39 @@ class PokemonDetail extends StatelessWidget {
                                       Column(
                                         children: [
                                           Text(
-                                            (pokemonInfo.weight / 10)
-                                                    .toString() +
-                                                " KG",
+                                            "${pokemonInfo.weight / 10} KG",
                                             style: new TextStyle(
                                               fontSize: 25.0,
-                                              color: Colors.black,
+                                              color:
+                                                  themeData.colorScheme.primary,
                                             ),
                                           ),
                                           SizedBox(height: 10.0),
-                                          Text("Weight"),
+                                          Text(
+                                            "Weight",
+                                            style: TextStyle(
+                                                color: themeData
+                                                    .colorScheme.primary),
+                                          ),
                                         ],
                                       ),
                                       Column(
                                         children: [
                                           Text(
-                                            (pokemonInfo.height / 10)
-                                                    .toString() +
-                                                " M",
+                                            "${pokemonInfo.height / 10} M",
                                             style: TextStyle(
                                               fontSize: 25.0,
-                                              color: Colors.black,
+                                              color:
+                                                  themeData.colorScheme.primary,
                                             ),
                                           ),
                                           SizedBox(height: 10.0),
-                                          Text("Height"),
+                                          Text(
+                                            "Height",
+                                            style: TextStyle(
+                                                color: themeData
+                                                    .colorScheme.primary),
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -222,19 +229,23 @@ class PokemonDetail extends StatelessWidget {
                                         "Base Stats",
                                         style: new TextStyle(
                                           fontSize: 20.0,
-                                          color: Colors.black,
+                                          color: themeData.colorScheme.primary,
                                         ),
                                       ),
                                       SizedBox(height: 15.0),
-                                      ability("HP", pokemonInfo.hp),
+                                      ability(context, "HP", pokemonInfo.hp),
                                       SizedBox(height: 10.0),
-                                      ability("ATK", pokemonInfo.attack),
+                                      ability(
+                                          context, "ATK", pokemonInfo.attack),
                                       SizedBox(height: 10.0),
-                                      ability("DEF", pokemonInfo.defense),
+                                      ability(
+                                          context, "DEF", pokemonInfo.defense),
                                       SizedBox(height: 10.0),
-                                      ability("SPD", pokemonInfo.speed),
+                                      ability(
+                                          context, "SPD", pokemonInfo.speed),
                                       SizedBox(height: 10.0),
-                                      ability("EXP", pokemonInfo.exp, 1000)
+                                      ability(
+                                          context, "EXP", pokemonInfo.exp, 1000)
                                     ],
                                   ),
                                 ],
@@ -253,8 +264,18 @@ class PokemonDetail extends StatelessWidget {
     );
   }
 
-  Widget ability(String abilityName, int abilityValue,
+  Widget ability(BuildContext context, String abilityName, int abilityValue,
       [int maxAbilityValue = 300]) {
+    final themeData = Theme.of(context);
+    final percentage = abilityValue / maxAbilityValue;
+    Color color;
+    if (percentage <= 0.4) {
+      color = GFColors.DANGER;
+    } else if (percentage <= 0.75) {
+      color = GFColors.WARNING;
+    } else {
+      color = GFColors.SUCCESS;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -264,7 +285,7 @@ class PokemonDetail extends StatelessWidget {
               abilityName,
               style: TextStyle(
                 fontSize: 18.0,
-                color: Colors.black,
+                color: themeData.colorScheme.primary,
               ),
             ),
           ),
@@ -281,12 +302,15 @@ class PokemonDetail extends StatelessWidget {
                       lineHeight: 25,
                       percentage: abilityValue / maxAbilityValue,
                       backgroundColor: Colors.black26,
-                      progressBarColor: GFColors.DANGER),
+                      progressBarColor: color),
                   Align(
                     alignment: Alignment.center,
-                    child: Text(maxAbilityValue.toString() +
-                        "/" +
-                        abilityValue.toString()),
+                    child: Text(
+                      '$maxAbilityValue / $abilityValue',
+                      style: TextStyle(
+                        color: themeData.colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ],
               ),

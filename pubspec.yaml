@@ -35,7 +35,7 @@ dependencies:
 #  page_transition: ^2.0.4
 #  url_launcher: ^6.0.18
 #  flextras: ^0.0.2
-#  provider: ^6.0.1
+  provider: ^6.0.1
 #  cupertino_icons: ^1.0.2
 #  anchored_popups: ^0.1.0
 #  animate_do: ^2.0.0
@@ -67,6 +67,7 @@ dependencies:
 #  sized_context: ^1.0.0+1
   shared_preferences: ^2.0.12
   skeleton_loader: ^2.0.0+4
+  day_night_switcher: ^0.2.0+1
 #  share: ^2.0.1
 #  system_info: ^1.0.0
 #  statsfl: ^2.0.1+1
