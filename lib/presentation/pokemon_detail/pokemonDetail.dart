@@ -152,7 +152,9 @@ class PokemonDetail extends StatelessWidget {
                     default:
                       return Center(
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 450),
+                          constraints: BoxConstraints(maxWidth:
+                          useVerticalLayout ? screenSize.width * 0.80 : screenSize.width * 0.40
+                          ),
                           child: SingleChildScrollView(
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),

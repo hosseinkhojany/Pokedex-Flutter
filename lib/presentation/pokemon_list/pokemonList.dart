@@ -175,15 +175,11 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 if (pokemon.color != Colors.black12.value) {
                   return _PokemonItem(
                       pokemon: pokemon, dominantColor: Color(pokemon.color));
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return SizedBox();
                 } else {
                   PokemonController _controller = Get.find();
-                  var dominantColor =
-                      (snapshot.data as PaletteGenerator).dominantColor!.color;
-                  _controller.updatePokemonColor(
-                      pokemon.page, pokemon.name, dominantColor.value);
+                    var dominantColor = snapshot.data?.dominantColor?.color ?? Color(pokemon.color);
+                    _controller.updatePokemonColor(
+                        pokemon.page, pokemon.name, dominantColor.value);
                   return _PokemonItem(
                       pokemon: pokemon, dominantColor: dominantColor);
                 }
@@ -208,6 +204,7 @@ class _PokemonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       children: [
         Container(
@@ -222,6 +219,7 @@ class _PokemonItem extends StatelessWidget {
         Card(
           color: Colors.black12,
           elevation: 5,
+          shadowColor: Color(pokemon.color).withOpacity(0.6),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           clipBehavior: Clip.antiAlias,
@@ -287,21 +285,12 @@ class _PokemonItem extends StatelessWidget {
                               children: [
                                 Container(
                                   width: 150,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          spreadRadius: 15,
-                                          color: Color(pokemon.color)
-                                              .withOpacity(0.4)),
-                                    ],
-                                  ),
                                   child: Text(
                                     pokemon.name,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 18,
-                                      color: Color(0xff293241),
+                                      color: theme.colorScheme.surface,
                                     ),
                                   ),
                                 ),
