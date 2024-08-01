@@ -14,9 +14,9 @@ class AppBinding implements Bindings {
   Dio _dio() {
     final options = BaseOptions(
       baseUrl: BASE_API_URL,
-      connectTimeout: AppLimit.DIO_TIME_OUT,
-      receiveTimeout: AppLimit.DIO_TIME_OUT,
-      sendTimeout: AppLimit.DIO_TIME_OUT,
+      connectTimeout: Duration(milliseconds: AppLimit.DIO_TIME_OUT),
+      receiveTimeout: Duration(milliseconds: AppLimit.DIO_TIME_OUT),
+      sendTimeout: Duration(milliseconds: AppLimit.DIO_TIME_OUT),
     );
 
     var dio = Dio(options);
